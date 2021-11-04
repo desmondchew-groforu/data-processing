@@ -24,7 +24,7 @@
     <div class="tags" style="border-radius: 1rem; justify-content: center; margin-bottom: 0rem !important; min-width: 268px; height: 88px" v-if="this.dropFiles.length !== 0">
       <!-- <div class="d-poppins mr-3">File Uploaded</div> -->
       <span
-        style="padding: 1rem; border-radius: 0.5rem;"
+        style="padding: 1rem; border-radius: 0.5rem; border: 1px solid #cccccc;"
         class="tag is-grey d-poppins"
       >
         {{ dropFiles.name }}
@@ -34,6 +34,9 @@
           @click="deleteDropFile()"
         ></button>
         
+      </span>
+      <span v-if="status == 'processed'">
+        <b-tag type="is-primary is-light d-poppins" style="border-radius: 0.5rem; border: 1px solid #177d44; height: 32px;">Completed</b-tag>
       </span>
       
     </div>
