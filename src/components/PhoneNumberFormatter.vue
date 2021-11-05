@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
   </div> -->
   <section class="container">
-    <h1 class="mb-5 has-text-weight-bold d-poppins">Phone Number Formatter</h1>
+    <h1 class="mb-5 has-text-weight-bold d-poppins">Phone Number Formatter v1.1</h1>
     <b-field v-if="this.dropFiles.length === 0" class="m-4">
       <b-upload v-model="dropFiles" drag-drop type="is-primary">
         <section class="section">
@@ -179,7 +179,7 @@ export default {
 
           } else if (Arr[i].charAt(0) === "6" && this.isNumber(Arr[i])) {
             // OK
-            
+
           } else {
             let back = " [Error]"
             Arr[i] = Arr[i].concat(back);
