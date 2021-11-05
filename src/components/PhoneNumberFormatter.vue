@@ -75,7 +75,7 @@
       Reset
       </b-button>
 
-      <div class="mt-5" v-if="showProgress">
+      <div class="mt-5 mx-4" v-if="showProgress">
         <b-progress></b-progress>
       </div>
 
@@ -98,6 +98,9 @@ export default {
     };
   },
   methods: {
+    isNumber(param){
+      return /^\d+$/.test(param);
+    },
     deleteDropFile() {
       //this.dropFiles.splice(index, 1);
       this.dropFiles = [];
@@ -106,10 +109,6 @@ export default {
     toJson() {
       return new Promise((resolve, reject) => {
         try {
-          // let filename = this.$refs.azureUploader.files[0].name;
-          // let file = this.$refs.azureUploader.files
-          //   .filter((v) => v.name === filename)
-          //   .reduce((init, v) => v, []);
 
           //Get the uploaded file, azureUploader is the reference here, QUploader is the reference within our bit component.
           let file = this.dropFiles;
@@ -127,39 +126,18 @@ export default {
 
             var result = [];
 
-            var headers = lines[0].split(",");
+            //var headers = lines[0].split(",");
             //console.log("headers ", headers);
 
-            for (var i = 1; i < lines.length - 1; i++) {
+            for (var i = 0; i < lines.length; i++) {
               var obj = {};
-              var currentline = lines[i].split(",");
+              var currentline = lines[i];
               //console.log("line ", i, " ", currentline);
 
-              if (
-                currentline !== null &&
-                currentline !== "" &&
-                currentline !== undefined
-              ) {
-                for (var j = 0; j < headers.length; j++) {
-                  if (
-                    currentline[j] !== null &&
-                    currentline[j] !== "" &&
-                    currentline[j] !== undefined &&
-                    headers[j] !== null &&
-                    headers[j] !== "" &&
-                    headers[j] !== undefined
-                  ) {
-                    //console.log("headerJ ", headers[j], currentline[j]);
+              obj = currentline;
 
-                    obj = currentline[j];
-                    //console.log("obj in ", obj);
-                  }
-                }
-
-                //console.log("obj ", obj);
-                if (obj !== null && obj !== "" && obj !== undefined) {
-                  result.push(obj);
-                }
+              if (obj !== null && obj !== "" && obj !== undefined) {
+                result.push(obj);
               }
             }
 
@@ -182,11 +160,6 @@ export default {
       var strJson = await this.toJson();
       var Arr = JSON.parse(strJson);
 
-      //
-      // var Arr = parsedArr.filter(function (item) {
-      //   return JSON.stringify(item) !== "{}";
-      // });
-
       for (let i = 0; i < Arr.length; i++) {
 
         if (JSON.stringify(Arr[i]) == "{}"){
@@ -194,17 +167,23 @@ export default {
         }else{
 
           Arr[i] = Arr[i].replace("+", "").replace("-", "").split(' ').join('');
+          console.log('test isNumber', this.isNumber(Arr[0]));
 
-          if (Arr[i].charAt(0) === "1") {
+          if (Arr[i].charAt(0) === "1" && this.isNumber(Arr[i]) ) {
             let front1 = "60";
             Arr[i] = front1.concat(Arr[i]);
-          } else if (Arr[i].charAt(0) === "0") {
+
+          } else if (Arr[i].charAt(0) === "0" && this.isNumber(Arr[i])) {
             let front2 = "6";
             Arr[i] = front2.concat(Arr[i]);
-          } else if (Arr[i].charAt(0) === "6") {
+
+          } else if (Arr[i].charAt(0) === "6" && this.isNumber(Arr[i])) {
             // OK
+            
           } else {
-            // Do something, alert, insert key? such as 'Caution'
+            let back = " [Error]"
+            Arr[i] = Arr[i].concat(back);
+            // Warning
             // how about landline number?
           }
         }
